@@ -2,8 +2,8 @@ import { initializeApp } from 'firebase/app';
 import { getDatabase } from 'firebase/database';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBvBM-YoOJqSqs79NtfFLpcmm1msLwAN-Q",
-    databaseURL: "https://esp32-web-app-9c807-default-rtdb.asia-southeast1.firebasedatabase.app/",
+    apiKey: "your_api_key",
+    databaseURL: "your_database_url",
 };
 
 // Initialize Firebase
