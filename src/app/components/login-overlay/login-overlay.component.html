@@ -1,0 +1,161 @@
+<div class="login-dialog-container">
+  <div class="login-dialog-backdrop"></div>
+  <div class="login-dialog">
+    <div class="login-dialog-header">
+      <h2>{{ isLoginMode ? 'Login' : 'Create Account' }}</h2>
+      <button class="close-button" (click)="onCancel()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="login-dialog-content">
+      <!-- Login Form -->
+      <form *ngIf="isLoginMode" [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+        <div class="form-field">
+          <label for="username">Username</label>
+          <input
+            id="username"
+            type="username"
+            formControlName="username"
+            placeholder="Enter your Username"
+            [class.error]="loginForm.get('username')?.invalid && (loginForm.get('username')?.dirty || loginForm.get('username')?.touched)"
+          >
+          <div class="error-message" *ngIf="loginForm.get('username')?.invalid && (loginForm.get('username')?.dirty || loginForm.get('username')?.touched)">
+            {{ getEmailErrorMessage() }}
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="login-password">Password</label>
+          <div class="password-field">
+            <input
+              id="login-password"
+              [type]="hidePassword ? 'password' : 'text'"
+              formControlName="password"
+              placeholder="Enter your password"
+              [class.error]="loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)"
+            >
+            <button type="button" class="password-toggle" (click)="hidePassword = !hidePassword">
+              {{ hidePassword ? '👁️' : '👁️‍🗨️' }}
+            </button>
+          </div>
+          <div class="error-message" *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)">
+            {{ getPasswordErrorMessage() }}
+          </div>
+        </div>
+
+        <div class="forgot-password">
+          <a href="javascript:void(0)">Forgot password?</a>
+        </div>
+
+        <button
+          type="submit"
+          class="submit-button"
+          [disabled]="loginForm.invalid || isLoading"
+        >
+          <span *ngIf="!isLoading">Login</span>
+          <span *ngIf="isLoading" class="spinner"></span>
+        </button>
+      </form>
+
+      <!-- Signup Form -->
+      <form *ngIf="!isLoginMode" [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="signup-form">
+        <div class="form-field">
+          <label for="signin-username">Username</label>
+          <input
+            id="signin-username"
+            type="text"
+            formControlName="username"
+            placeholder="Enter your Username"
+            [class.error]="signupForm.get('username')?.invalid && (signupForm.get('username')?.dirty || signupForm.get('username')?.touched)"
+          >
+          <div class="error-message" *ngIf="signupForm.get('username')?.invalid && (signupForm.get('username')?.dirty || signupForm.get('username')?.touched)">
+            Username is required
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="signup-email">Email</label>
+          <input
+            id="signup-email"
+            type="email"
+            formControlName="email"
+            placeholder="Enter your email"
+            [class.error]="signupForm.get('email')?.invalid && (signupForm.get('email')?.dirty || signupForm.get('email')?.touched)"
+          >
+          <div class="error-message" *ngIf="signupForm.get('email')?.invalid && (signupForm.get('email')?.dirty || signupForm.get('email')?.touched)">
+            {{ getEmailErrorMessage() }}
+          </div>
+        </div>
+
+        <!--to get product_id-->
+        <div class="form-field">
+          <label for="signup-product_id">Product ID</label>
+          <input
+            id="signup-product_id"
+            type="text"
+            formControlName="product_id"
+            placeholder="Enter your product_id"
+            [class.error]="signupForm.get('product_id')?.invalid && (signupForm.get('product_id')?.dirty || signupForm.get('product_id')?.touched)"
+          >
+          <div class="error-message" *ngIf="signupForm.get('product_id')?.invalid && (signupForm.get('product_id')?.dirty || signupForm.get('product_id')?.touched)">
+            Product ID is required
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="signup-password">Password</label>
+          <div class="password-field">
+            <input
+              id="signup-password"
+              [type]="hidePassword ? 'password' : 'text'"
+              formControlName="password"
+              placeholder="Create a password"
+              [class.error]="signupForm.get('password')?.invalid && (signupForm.get('password')?.dirty || signupForm.get('password')?.touched)"
+            >
+            <button type="button" class="password-toggle" (click)="hidePassword = !hidePassword">
+              {{ hidePassword ? '👁️' : '👁️‍🗨️' }}
+            </button>
+          </div>
+          <div class="error-message" *ngIf="signupForm.get('password')?.invalid && (signupForm.get('password')?.dirty || signupForm.get('password')?.touched)">
+            {{ getPasswordErrorMessage() }}
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="signup-confirm-password">Confirm Password</label>
+          <input
+            id="signup-confirm-password"
+            type="password"
+            formControlName="confirmPassword"
+            placeholder="Confirm your password"
+            [class.error]="signupForm.get('confirmPassword')?.invalid && (signupForm.get('confirmPassword')?.dirty || signupForm.get('confirmPassword')?.touched)"
+          >
+          <div class="error-message" *ngIf="signupForm.get('confirmPassword')?.hasError('passwordMismatch')">
+            Passwords don't match
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          class="submit-button"
+          [disabled]="signupForm.invalid || isLoading"
+        >
+          <span *ngIf="!isLoading">Create Account</span>
+          <span *ngIf="isLoading" class="spinner"></span>
+        </button>
+      </form>
+    </div>
+
+    <div class="login-dialog-footer">
+      <p *ngIf="isLoginMode">
+        Don't have an account?
+        <a href="javascript:void(0)" (click)="toggleMode()">Sign up</a>
+      </p>
+      <p *ngIf="!isLoginMode">
+        Already have an account?
+        <a href="javascript:void(0)" (click)="toggleMode()">Login</a>
+      </p>
+    </div>
+  </div>
+</div>
