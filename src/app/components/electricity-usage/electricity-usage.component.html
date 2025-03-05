@@ -1,0 +1,162 @@
+<div class="electricity-usage-container">
+  <div class="header-section">
+    <h1>Electricity Usage Monitor</h1>
+    <div class="user-info">
+      <span class="username">{{username}}</span> | <span class="product-id">Device: {{productId}}</span>
+    </div>
+  </div>
+
+  <div class="view-mode-selector">
+    <div class="mode-option" [class.active]="selectedMode === 'hourly'" (click)="setMode('hourly')">
+      <i class="fas fa-clock"></i>
+      <span>Hourly</span>
+    </div>
+    <div class="mode-option" [class.active]="selectedMode === 'daily'" (click)="setMode('daily')">
+      <i class="fas fa-calendar-day"></i>
+      <span>Daily</span>
+    </div>
+    <div class="mode-option" [class.active]="selectedMode === 'monthly'" (click)="setMode('monthly')">
+      <i class="fas fa-calendar-alt"></i>
+      <span>Monthly</span>
+    </div>
+    <div class="mode-option" [class.active]="selectedMode === 'yearly'" (click)="setMode('yearly')">
+      <i class="fas fa-calendar-check"></i>
+      <span>Yearly</span>
+    </div>
+  </div>
+
+  <div class="date-selector-section">
+    <!-- Yearly Mode - Year selection -->
+    <div *ngIf="selectedMode === 'yearly'" class="date-inputs">
+      <div class="input-group">
+        <label for="year-select">Year:</label>
+        <select id="year-select" [(ngModel)]="selectedYear">
+          <option *ngFor="let year of availableYears" [value]="year">{{year}}</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Monthly Mode - Year and Month selection -->
+    <div *ngIf="selectedMode === 'monthly'" class="date-inputs">
+      <div class="input-group">
+        <label for="month-year-select">Year:</label>
+        <select id="month-year-select" [(ngModel)]="selectedYear">
+          <option *ngFor="let year of availableYears" [value]="year">{{year}}</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label for="month-select">Month:</label>
+        <select id="month-select" [(ngModel)]="selectedMonth">
+          <option value="01">January</option>
+          <option value="02">February</option>
+          <option value="03">March</option>
+          <option value="04">April</option>
+          <option value="05">May</option>
+          <option value="06">June</option>
+          <option value="07">July</option>
+          <option value="08">August</option>
+          <option value="09">September</option>
+          <option value="10">October</option>
+          <option value="11">November</option>
+          <option value="12">December</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Daily Mode - Full Date selection -->
+    <div *ngIf="selectedMode === 'daily'" class="date-inputs">
+      <div class="input-group">
+        <label for="daily-date">Date:</label>
+        <input type="date" id="daily-date" [(ngModel)]="selectedDate">
+      </div>
+    </div>
+
+    <!-- Hourly Mode - Date and Hour selection -->
+    <div *ngIf="selectedMode === 'hourly'" class="date-inputs">
+      <div class="input-group">
+        <label for="hourly-date">Date:</label>
+        <input type="date" id="hourly-date" [(ngModel)]="selectedDate">
+      </div>
+      <div class="input-group">
+        <label for="hour-select">Hour:</label>
+        <select id="hour-select" [(ngModel)]="selectedHour">
+          <option value="00">00:00 - 01:00</option>
+          <option value="01">01:00 - 02:00</option>
+          <option value="02">02:00 - 03:00</option>
+          <option value="03">03:00 - 04:00</option>
+          <option value="04">04:00 - 05:00</option>
+          <option value="05">05:00 - 06:00</option>
+          <option value="06">06:00 - 07:00</option>
+          <option value="07">07:00 - 08:00</option>
+          <option value="08">08:00 - 09:00</option>
+          <option value="09">09:00 - 10:00</option>
+          <option value="10">10:00 - 11:00</option>
+          <option value="11">11:00 - 12:00</option>
+          <option value="12">12:00 - 13:00</option>
+          <option value="13">13:00 - 14:00</option>
+          <option value="14">14:00 - 15:00</option>
+          <option value="15">15:00 - 16:00</option>
+          <option value="16">16:00 - 17:00</option>
+          <option value="17">17:00 - 18:00</option>
+          <option value="18">18:00 - 19:00</option>
+          <option value="19">19:00 - 20:00</option>
+          <option value="20">20:00 - 21:00</option>
+          <option value="21">21:00 - 22:00</option>
+          <option value="22">22:00 - 23:00</option>
+          <option value="23">23:00 - 00:00</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="fetch-data-btn" (click)="fetchUsageData()">
+      <i class="fas fa-sync"></i> Get Usage Data
+    </button>
+  </div>
+
+  <div class="chart-container" *ngIf="chartData && chartData.data_points && chartData.data_points.length > 0">
+    <div class="chart-header">
+      <h2>{{ chartData.chart_title }}</h2>
+      <div class="chart-actions">
+        <button class="action-btn" (click)="downloadChart()">
+          <i class="fas fa-download"></i>
+        </button>
+        <button class="action-btn" (click)="refreshData()">
+          <i class="fas fa-redo"></i>
+        </button>
+      </div>
+    </div>
+    <div class="canvas-wrapper">
+      <canvas #usageChart></canvas>
+    </div>
+    <!--<div class="axis-labels">
+      <div class="x-axis-label">{{ chartData.x_axis_label }}</div>
+      <div class="y-axis-label">{{ chartData.y_axis_label }}</div>
+    </div>-->
+  </div>
+
+  <div class="no-data-message" *ngIf="!chartData && hasAttemptedFetch && !isLoading">
+    <i class="fas fa-chart-line"></i>
+    <p>No electricity usage data available for the selected period.</p>
+    <p>Please try selecting a different time range.</p>
+  </div>
+
+  <div class="loading-indicator" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <span>Loading data...</span>
+  </div>
+
+  <div class="data-summary" *ngIf="chartData && chartData.data_points && chartData.data_points.length > 0">
+    <div class="summary-item">
+      <span class="label">Average Consumption:</span>
+      <span class="value">{{ calculateAverage() | number:'1.2-2' }} W</span>
+    </div>
+    <div class="summary-item">
+      <span class="label">Peak Usage:</span>
+      <span class="value">{{ getPeakUsage() | number:'1.2-2' }} W</span>
+    </div>
+    <div class="summary-item">
+      <span class="label">Lowest Usage:</span>
+      <span class="value">{{ getLowestUsage() | number:'1.2-2' }} W</span>
+    </div>
+  </div>
+</div>
