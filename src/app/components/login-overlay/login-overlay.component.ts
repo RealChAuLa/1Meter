@@ -4,6 +4,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NgIf } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { AuthStore } from '../../services/auth-store';
+
 @Component({
   selector: 'app-login-dialog',
   templateUrl: './login-overlay.component.html',
@@ -75,6 +77,10 @@ export class LoginDialogComponent implements OnInit {
             // Save the username and product_id in local variables
             const username = response.username;
             const productId = response.product_id;
+
+            // Store auth info in our shared store instead of localStorage
+            AuthStore.setAuthInfo(response.username, response.product_id);
+
 
             this.dialogRef.close();
             // Redirect to /electricity-usage page and pass the variables

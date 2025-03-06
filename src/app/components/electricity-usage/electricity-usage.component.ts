@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { catchError, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
+import {NavbarComponent} from '../navbar/navbar.component';
 
 // Register Chart.js components
 Chart.register(...registerables);
@@ -26,7 +27,7 @@ interface ChartData {
   selector: 'app-electricity-usage',
   templateUrl: './electricity-usage.component.html',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NavbarComponent],
   styleUrls: ['./electricity-usage.component.css']
 })
 export class ElectricityUsageComponent implements OnInit, AfterViewInit {
@@ -70,9 +71,9 @@ export class ElectricityUsageComponent implements OnInit, AfterViewInit {
     } else {
       // Try to get from route params or queryParams as fallback
       this.route.paramMap.subscribe(params => {
-        this.productId = params.get('productId') || 'unknown';
+        this.productId = params.get('productId') || "";
       });
-      this.username = 'RealChAuLa'; // Default to the current user
+      this.username = 'Not Logged In'; // Default to the current user
     }
 
     // Set up initial date values based on current date

@@ -1,10 +1,24 @@
+<!-- navbar.component.html -->
 <nav class="navbar">
-  <div class="logo">1Meter</div>
-  <div class="nav-links">
-    <div class="">Pricing</div>
-    <div class="">Features</div>
-    <div class="">Contact</div>
+  <div class="logo" (click)="router.navigate(['/'])">1Meter</div>
+
+  <!-- Show this if not authenticated or productId is empty -->
+  <div class="nav-links" *ngIf="productId === null">
+    <div class="nav-item">Pricing</div>
+    <div class="nav-item">Features</div>
+    <div class="nav-item">Contact</div>
     <button class="nav-btn login-btn" (click)="login()">Login</button>
     <button class="nav-btn signup-btn" (click)="signup()">Sign Up</button>
+  </div>
+
+  <!-- Show this if authenticated or productId is not empty -->
+  <div class="nav-links" *ngIf="productId !== null">
+    <div class="nav-btn" (click)="navigateToUsage()">Electricity Usage</div>
+    <div class="nav-btn" (click)="navigateToBill()">Bill</div>
+    <div class="user-info">
+      <!--<span class="username">{{ currentUser }}</span>
+      <span class="datetime">{{ currentDateTime }}</span>-->
+    </div>
+    <button class="nav-btn logout-btn" (click)="logout()">Log Out</button>
   </div>
 </nav>
