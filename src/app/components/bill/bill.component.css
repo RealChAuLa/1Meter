@@ -1,0 +1,426 @@
+/* bill.component.scss */
+
+/* Global styles */
+:host {
+  display: block;
+  font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+  color: #333;
+  background-color: #f5f9fc;
+}
+
+.bill-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-top: 10vh;
+  padding: 20px;
+}
+
+/* Page header */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #e0e8f0;
+  padding-bottom: 1rem;
+}
+
+.page-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #0064c8;
+  margin: 0;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.username {
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: #0064c8;
+}
+
+.date-time {
+  color: #6b7c93;
+  font-size: 0.9rem;
+}
+
+/* Bill sections */
+.bill-section {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+}
+
+.bill-section h2 {
+  margin-top: 0;
+  color: #0064c8;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #e0e8f0;
+  padding-bottom: 1rem;
+}
+
+.current-bill {
+  position: relative;
+  overflow: hidden;
+}
+
+.current-bill::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 100%;
+  background: #e0e8f0;
+}
+
+.paid::before {
+  background: linear-gradient(to bottom, #00c48c, #00a17a);
+}
+
+.unpaid::before {
+  background: linear-gradient(to bottom, #ff6b6b, #ee5253);
+}
+
+/* Bill details */
+.bill-details {
+  background-color: #f8fafc;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.bill-detail-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid #e0e8f0;
+}
+
+.bill-detail-row:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.label {
+  color: #6b7c93;
+  font-weight: 500;
+}
+
+.value {
+  font-weight: 600;
+  color: #333;
+}
+
+.amount {
+  font-size: 1.2em;
+  color: #0064c8;
+}
+
+.status {
+  font-weight: 700;
+}
+
+.paid-status {
+  color: #00c48c;
+}
+
+.unpaid-status {
+  color: #ff6b6b;
+}
+
+/* Message box */
+.message-box {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.success {
+  background-color: rgba(0, 196, 140, 0.1);
+  border-left: 4px solid #00c48c;
+  color: #00c48c;
+}
+
+.warning {
+  background-color: rgba(255, 107, 107, 0.1);
+  border-left: 4px solid #ff6b6b;
+  color: #ff6b6b;
+}
+
+/* Payment form */
+.payment-form {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed #e0e8f0;
+}
+
+.payment-form h3 {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.payment-options {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.payment-method {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.payment-method input[type="radio"] {
+  accent-color: #0064c8;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-group.half {
+  width: 50%;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #6b7c93;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e0e8f0;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #0064c8;
+  box-shadow: 0 0 0 2px rgba(0, 100, 200, 0.1);
+}
+
+.pay-button {
+  background: linear-gradient(to right, #0064c8, #4295f5);
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 8px;
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-top: 1rem;
+}
+
+.pay-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 100, 200, 0.2);
+}
+
+.pay-button:active {
+  transform: translateY(0);
+}
+
+/* Payment history table */
+.table-container {
+  overflow-x: auto;
+}
+
+.payment-table {
+  width: 100%;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+.payment-table th {
+  background-color: #f8fafc;
+  color: #6b7c93;
+  font-weight: 600;
+  text-align: left;
+  padding: 1rem;
+  border-bottom: 2px solid #e0e8f0;
+}
+
+.payment-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #e0e8f0;
+}
+
+.payment-table tr:last-child td {
+  border-bottom: none;
+}
+
+.payment-table tr:hover {
+  background-color: #f8fafc;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.status-badge.paid {
+  background-color: rgba(0, 196, 140, 0.1);
+  color: #00c48c;
+}
+
+.no-data {
+  text-align: center;
+  color: #6b7c93;
+  font-style: italic;
+}
+
+/* Info section */
+.info-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.info-item h3 {
+  font-size: 1.1rem;
+  margin-top: 0;
+  color: #0064c8;
+}
+
+.info-item p {
+  color: #6b7c93;
+  line-height: 1.6;
+}
+
+/* Tips section */
+.tips-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.tip-card {
+  background-color: #f8fafc;
+  border-radius: 10px;
+  padding: 1.5rem;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.tip-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.tip-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.tip-card h3 {
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+  color: #0064c8;
+}
+
+.tip-card p {
+  margin: 0;
+  color: #6b7c93;
+  line-height: 1.5;
+}
+
+/* Loading spinner */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 0;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 100, 200, 0.1);
+  border-left-color: #0064c8;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .user-info {
+    align-items: flex-start;
+    margin-top: 1rem;
+  }
+
+  .bill-section {
+    padding: 1.5rem;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .form-group.half {
+    width: 100%;
+  }
+
+  .info-content, .tips-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-header h1 {
+    font-size: 2rem;
+  }
+
+  .bill-details {
+    padding: 1rem;
+  }
+
+  .bill-section {
+    padding: 1rem;
+  }
+}

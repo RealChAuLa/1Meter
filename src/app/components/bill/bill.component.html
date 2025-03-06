@@ -1,0 +1,172 @@
+<app-navbar></app-navbar>
+<!-- bill.component.html -->
+<div class="bill-container">
+  <div class="page-header">
+    <h1>Electricity Bill</h1>
+    <div class="user-info">
+      <span class="username">{{ username }}</span>
+      <span class="date-time">{{ currentDateTime }}</span>
+    </div>
+  </div>
+
+  <!-- Current Bill Section -->
+  <div class="bill-section current-bill" [ngClass]="{'paid': currentBill?.is_paid, 'unpaid': !currentBill?.is_paid}">
+    <h2>Current Bill: {{ currentBill?.year_month }}</h2>
+
+    <div class="bill-info" *ngIf="!isLoading && currentBill">
+      <div class="bill-details">
+        <div class="bill-detail-row">
+          <span class="label">Period:</span>
+          <span class="value">{{ currentBill.year_month }}</span>
+        </div>
+        <div class="bill-detail-row">
+          <span class="label">Total Consumption:</span>
+          <span class="value">{{ currentBill.total_kwh }} kWh</span>
+        </div>
+        <div class="bill-detail-row">
+          <span class="label">Amount:</span>
+          <span class="value amount">Rs. {{ currentBill.amount.toFixed(2) }}</span>
+        </div>
+        <div class="bill-detail-row">
+          <span class="label">Status:</span>
+          <span class="value status" [ngClass]="{'paid-status': currentBill.is_paid, 'unpaid-status': !currentBill.is_paid}">
+            {{ currentBill.is_paid ? 'Paid' : 'Unpaid' }}
+          </span>
+        </div>
+        <div class="bill-detail-row" *ngIf="currentBill.payment_date">
+          <span class="label">Payment Date:</span>
+          <span class="value">{{ currentBill.payment_date }}</span>
+        </div>
+      </div>
+
+      <div class="message-box" [ngClass]="{'success': currentBill.is_paid, 'warning': !currentBill.is_paid}">
+        {{ currentBill.message }}
+      </div>
+
+      <!-- Payment Form (only show if bill is unpaid) -->
+      <div class="payment-form" *ngIf="!currentBill.is_paid">
+        <h3>Make a Payment</h3>
+        <div class="payment-options">
+          <div class="payment-method">
+            <input type="radio" id="card" name="paymentMethod" value="card" checked>
+            <label for="card">Credit/Debit Card</label>
+          </div>
+          <div class="payment-method">
+            <input type="radio" id="transfer" name="paymentMethod" value="transfer">
+            <label for="transfer">Bank Transfer</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="cardNumber">Card Number</label>
+          <input type="text" id="cardNumber" placeholder="XXXX XXXX XXXX XXXX" [(ngModel)]="paymentDetails.cardNumber">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group half">
+            <label for="expiry">Expiry Date</label>
+            <input type="text" id="expiry" placeholder="MM/YY" [(ngModel)]="paymentDetails.expiry">
+          </div>
+          <div class="form-group half">
+            <label for="cvv">CVV</label>
+            <input type="text" id="cvv" placeholder="XXX" [(ngModel)]="paymentDetails.cvv">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="name">Cardholder Name</label>
+          <input type="text" id="name" placeholder="Enter name as on card" [(ngModel)]="paymentDetails.name">
+        </div>
+
+        <button class="pay-button" (click)="makePayment()">
+          <span *ngIf="!isSubmitting">Pay Rs. {{ currentBill.amount.toFixed(2) }}</span>
+          <span *ngIf="isSubmitting" class="spinner"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading indicator -->
+    <div class="loading-container" *ngIf="isLoading">
+      <div class="spinner"></div>
+      <p>Loading bill information...</p>
+    </div>
+  </div>
+
+  <!-- Payment History Section -->
+  <div class="bill-section payment-history">
+    <h2>Payment History</h2>
+
+    <div class="table-container" *ngIf="!isLoadingHistory && paymentHistory">
+      <table class="payment-table">
+        <thead>
+        <tr>
+          <th>Period</th>
+          <th>Amount</th>
+          <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngIf="paymentHistory.payments.length === 0">
+          <td colspan="3" class="no-data">No payment history available</td>
+        </tr>
+        <tr *ngFor="let payment of paymentHistory.payments">
+          <td>{{ payment.month }}</td>
+          <td>Rs. {{ payment.amount.toFixed(2) }}</td>
+          <td><span class="status-badge paid">Paid</span></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Loading indicator for payment history -->
+    <div class="loading-container" *ngIf="isLoadingHistory">
+      <div class="spinner"></div>
+      <p>Loading payment history...</p>
+    </div>
+  </div>
+
+  <!-- Bill Information Section -->
+  <div class="bill-section info-section">
+    <h2>Understanding Your Bill</h2>
+    <div class="info-content">
+      <div class="info-item">
+        <h3>How We Calculate Your Bill</h3>
+        <p>Your electricity bill is calculated based on your total consumption in kilowatt-hours (kWh) multiplied by the applicable tariff rate. Additional charges may include fixed charges, taxes, and other fees as mandated by the electricity regulatory commission.</p>
+      </div>
+
+      <div class="info-item">
+        <h3>Payment Due Date</h3>
+        <p>Payment is due within 14 days of bill generation. Late payments may incur additional charges and can result in service interruption.</p>
+      </div>
+
+      <div class="info-item">
+        <h3>Need Help?</h3>
+        <p>If you have any questions regarding your bill or need assistance with payment, please contact our customer service at <strong>support&#64;1meter.com</strong> or call <strong>1800-123-4567</strong>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Energy Saving Tips Section -->
+  <div class="bill-section tips-section">
+    <h2>Energy Saving Tips</h2>
+    <div class="tips-container">
+      <div class="tip-card">
+        <div class="tip-icon">💡</div>
+        <h3>Switch to LED</h3>
+        <p>LED bulbs use up to 80% less energy than traditional bulbs and last much longer.</p>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-icon">🌡️</div>
+        <h3>Optimal Temperature</h3>
+        <p>Set your thermostat to 24-26°C for optimal energy efficiency in warm weather.</p>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-icon">🔌</div>
+        <h3>Unplug Devices</h3>
+        <p>Unplug electronics when not in use to avoid phantom energy consumption.</p>
+      </div>
+    </div>
+  </div>
+</div>
