@@ -1,0 +1,78 @@
+<div class="admin-container">
+  <header class="admin-header">
+    <h1>User Connection Status Management</h1>
+    <div class="user-info">
+      <span class="current-user">Admin: {{ currentUser }}</span>
+      <span class="current-time">{{ currentDateTime }}</span>
+    </div>
+  </header>
+
+  <div class="status-header">
+    <div class="refresh-section">
+      <button class="refresh-btn" (click)="loadConnectionStatus()">
+        <i class="fas fa-sync-alt"></i> Refresh Data
+      </button>
+      <span *ngIf="timestamp" class="timestamp">Last updated: {{ timestamp }}</span>
+    </div>
+
+    <div class="summary-info">
+      <span class="total-count">Total Users: {{ totalCount || 0 }}</span>
+      <span class="active-count">Online: {{ activeCount || 0 }}</span>
+      <span class="inactive-count">Offline: {{ inactiveCount || 0 }}</span>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <div *ngIf="loading" class="loading-spinner">
+      <div class="spinner"></div>
+      <span>Loading user data...</span>
+    </div>
+
+    <table *ngIf="!loading && users?.length">
+      <thead>
+      <tr>
+        <th>Username</th>
+        <th>Product ID</th>
+        <th>Email</th>
+        <th>Last Active</th>
+        <th>Connection Status</th>
+        <th>Toggle Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let user of users" [ngClass]="{'active-user': user.connection_status, 'inactive-user': !user.connection_status}">
+        <td>{{ user.username }}</td>
+        <td>{{ user.product_id }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.last_active || 'Never' }}</td>
+        <td>
+            <span class="status-indicator" [ngClass]="{'online': user.connection_status, 'offline': !user.connection_status}">
+              {{ user.connection_status ? 'Online' : 'Offline' }}
+            </span>
+        </td>
+        <td>
+          <label class="toggle">
+            <input
+              type="checkbox"
+              [checked]="user.connection_status"
+              (change)="toggleConnectionStatus(user.product_id, !user.connection_status)"
+              [disabled]="isToggling[user.product_id]"
+            >
+            <span class="slider round"></span>
+          </label>
+          <div *ngIf="isToggling[user.product_id]" class="mini-spinner"></div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!loading && (!users || users.length === 0)" class="no-data">
+      <p>No users found</p>
+    </div>
+
+    <div *ngIf="error" class="error-message">
+      <p>{{ error }}</p>
+      <button (click)="loadConnectionStatus()">Try Again</button>
+    </div>
+  </div>
+</div>
